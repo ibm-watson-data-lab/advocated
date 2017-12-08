@@ -1,0 +1,20 @@
+.md-app {
+  border: 1px solid rgba(#000, .12);
+}
+
+ // Demo purposes only
+.md-drawer {
+  width: 230px;
+  max-width: calc(100vw - 125px);
+}
+
+.md-progress-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+[v-cloak] {
+  display: none;
+}

@@ -1,0 +1,306 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/vue-material@0.8.1/dist/vue-material.css">
+    <link rel="stylesheet" href="css/advocated.css">
+  </head>
+
+  <body>
+    <div id="app" v-cloak>
+      <!-- Your code here -->
+      <md-toolbar class="md-primary">
+        <h2 class="md-title" style="flex: 1;">/advocated</h2>
+      </md-toolbar>
+
+      <div class="main-content">
+        <md-snackbar md-position="top center" ref="snackbar" md-duration="4000">
+          <span>{{ msg }}</span>
+          <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
+        </md-snackbar>
+        <div v-if="err"> {{ err }} </div>
+
+        <md-tabs v-if="cookie">
+          <md-tab id="tab-home" md-label="Home">
+            Home Tab
+          </md-tab>
+
+          <md-tab id="tab-attended" md-label="Attended">
+            <div>
+              <h2>I attended an Event</h2>
+              <form novalidate>
+                <input type="hidden" name="collection" v-model="attended.collection" value="event" />
+                <input type="hidden" name="_id" v-model="attended._id" />
+                <input type="hidden" name="_rev" v-model="attended._rev" />
+
+                <md-input-container>
+                  <label for="title">Title</label>
+                  <md-input name="title" id="attended-title" v-model="attended.title" placeholder="Event Title" required />
+                </md-input-container>
+                
+                <md-input-container>
+                  <label for="dtstart">Date Start</label>
+                  <md-input name="dtstart" type="date" id="attended-dtstart" v-model="attended.dtstart" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="dtend">Date End</label>
+                  <md-input name="dtend" type="date" id="attended-dtend" v-model="attended.dtend" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="description">Description</label>
+                  <md-textarea name="description" id="attended-description" v-model="attended.description" />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="attendees">Attendees</label>
+                  <md-textarea name="attendees" type="number" id="attended-attendees" v-model="attended.attendees" required />
+                </md-input-container>                
+
+                <div>
+                  <md-checkbox v-model="attended.conference">Conference</md-checkbox>
+                  <md-checkbox v-model="attended.meetup">Meetup</md-checkbox>
+                  <md-checkbox v-model="attended.hackathon">Hackthon</md-checkbox>
+                  <md-checkbox v-model="attended.sponsored">Sponsored</md-checkbox>
+                </div>
+
+                <md-input-container>
+                  <label for="tags">Tags</label>
+                  <md-textarea name="tags" id="attended-tags" v-model="attended.tags" />
+                </md-input-container>
+                
+                <md-input-container>
+                  <label for="comments">Comments</label>
+                  <md-textarea name="comments" id="attended-comments" v-model="attended.comments" />
+                </md-input-container>
+                  
+                <md-input-container>
+                  <label for="latitude">Latitude</label>
+                  <md-input name="latitude" type="number" id="attended-latitude" v-model="attended.latitude" min="-90" max="90" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="longitude">Longitude</label>
+                  <md-input name="longitude" type="number" id="attended-longitude" v-model="attended.longitude" min="-180" max="180" required />
+                </md-input-container>
+
+                <div>
+                  <md-button type="button" class="md-primary" :disabled="!attendedReady" v-on:click="submitForm(attended)">Submit</md-button>
+                </div>
+
+              </form>
+            </div>
+          </md-tab> <!-- attended -->
+
+
+          <md-tab id="tab-presented" md-label="Presented">
+            <div>
+              <h2>I presented at an Event</h2>
+              <form novalidate>
+
+                <input type="hidden" name="collection" v-model="presented.collection" value="session" />
+                <input type="hidden" name="_id" v-model="presented._id" />
+                <input type="hidden" name="_rev" v-model="presented._rev" />
+
+                <md-input-container>
+                  <label for="title">Title</label>
+                  <md-input name="title" id="presented-title" v-model="presented.title" placeholder="Session Title" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="dtstart">Date Start</label>
+                  <md-input name="dtstart" type="date" id="presented-dtstart" v-model="presented.dtstart" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="description">Description</label>
+                  <md-textarea name="description" id="presented-description" v-model="presented.description" />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="attendees">Attendees</label>
+                  <md-input name="attendees" type="number" id="presented-attendees" v-model="presented.attendees" required />
+                </md-input-container>
+
+                <div>
+                  <md-checkbox v-model="presented.conference">Conference</md-checkbox>
+                  <md-checkbox v-model="presented.meetup">Meetup</md-checkbox>
+                  <md-checkbox v-model="presented.hackathon">Hackthon</md-checkbox>
+                  <md-checkbox v-model="presented.webinar">Webinar</md-checkbox>
+                  <md-checkbox v-model="presented.sponsored">Sponsored</md-checkbox>
+                </div>
+
+                <md-input-container>
+                  <label for="tags">Tags</label>
+                  <md-textarea name="tags" id="presented-tags" v-model="presented.tags" />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="comments">Comments</label>
+                  <md-textarea name="comments" id="presented-comments" v-model="presented.comments" />
+                </md-input-container>
+          
+                <div>
+                  <md-button type="button" class="md-primary" :disabled="!presentedReady" v-on:click="submitForm(presented)">Submit</md-button>
+                </div>
+
+              </form>
+            </div>
+          </md-tab> <!-- presented -->
+
+          <md-tab id="tab-blogged" md-label="Blogged">
+            <div>
+              <h2>I published a blog</h2>
+              <form novalidate>
+
+                <input type="hidden" name="collection" v-model="blogged.collection" value="blog" />
+                <input type="hidden" name="_id" v-model="blogged._id" />
+                <input type="hidden" name="_rev" v-model="blogged._rev" />
+
+                <md-input-container>
+                  <label for="title">Title</label>
+                  <md-input name="title" id="blogged-title" v-model="blogged.title" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="dtstart">Date</label>
+                  <md-input name="dtstart" type="date" id="blogged-dtstart" v-model="blogged.dtstart" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="url">URL</label>
+                  <md-input name="url" type="url" id="blogged-url" v-model="blogged.url" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="comments">Comments</label>
+                  <md-textarea name="comments" id="blogged-comments" v-model="blogged.comments" />
+                </md-input-container>
+                
+                <div>
+                  <md-button type="button" class="md-primary" :disabled="!bloggedReady" v-on:click="submitForm(blogged)">Submit</md-button>
+                </div>
+                    
+              </form>
+            </div>
+          </md-tab> <!-- blogged -->
+
+          <md-tab id="tab-press" md-label="Press">
+            <div>
+              <h2>I spoke to the press</h2>
+              <form novalidate>
+
+                <input type="hidden" name="collection" v-model="press.collection" value="press" />
+                <input type="hidden" name="_id" v-model="press._id" />
+                <input type="hidden" name="_rev" v-model="press._rev" />
+
+                <md-input-container>
+                  <label for="title">Title</label>
+                  <md-input name="title" id="press-title" v-model="press.title" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="title">Outlet</label>
+                  <md-input name="outlet" id="press-outlet" v-model="press.outlet" placeholder="e.g. New York Times" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="dtstart">Date</label>
+                  <md-input name="dtstart" type="date" id="press-dtstart" v-model="press.dtstart" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="url">URL</label>
+                  <md-input name="url" type="url" id="press-url" v-model="press.url" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="tags">Tags</label>
+                  <md-textarea name="tags" id="press-tags" v-model="press.tags" />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="comments">Comments</label>
+                  <md-textarea name="comments" id="press-comments" v-model="press.comments" />
+                </md-input-container>
+
+                <div>
+                  <md-button type="button" class="md-primary" :disabled="!pressReady" v-on:click="submitForm(press)">Submit</md-button>
+                </div>
+              </form>
+            </div>
+          </md-tab> <!-- press -->
+
+          <md-tab id="tab-expense" md-label="Expense">
+            <div>
+              <h2>I spent some money</h2>
+              <form novalidate>
+
+                <input type="hidden" name="collection" v-model="expense.collection" value="expense" />
+                <input type="hidden" name="_id" v-model="expense._id" />
+                <input type="hidden" name="_rev" v-model="expense._rev" />
+
+                <md-input-container>
+                  <label for="title">Title</label>
+                  <md-input name="title" id="expense-title" v-model="expense.title" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="dtstart">Date</label>
+                  <md-input name="dtstart" type="date" id="expense-dtstart" v-model="expense.dtstart" required />
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="comments">Comments</label>
+                  <md-textarea name="comments" id="expense-comments" v-model="expense.comments" />
+                </md-input-container>
+
+                <md-input-container>
+                    <label for="travel_expenses_currency">Travel expenses currency</label>
+                    <md-select v-model="expense.travel_expenses_currency" name="travel_expenses_currency" id="travel_expenses_currency">
+                      <md-option value="USD">USD</md-option>
+                      <md-option value="EUR">EUR</md-option>
+                      <md-option value="GBP">GBP</md-option>
+                    </md-select>
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="travel_expenses">Travel Expenses</label>
+                  <md-input name="travel_expenses" type="number" id="travel_expenses" v-model="expense.travel_expenses" placeholder="0.00"/>
+                </md-input-container>
+
+                <md-input-container>
+                  <label for="non_travel_expenses_currency">Non-Travel Expenses currency</label>
+                  <md-select v-model="expense.non_travel_expenses_currency" name="non_travel_expenses_currency" id="non_travel_expenses_currency">
+                    <md-option value="USD">USD</md-option>
+                    <md-option value="EUR">EUR</md-option>
+                    <md-option value="GBP">GBP</md-option>
+                  </md-select>
+                </md-input-container>
+
+                <md-input-container>
+                  <label>Non-Travel Expenses</label>
+                  <md-input type="number" v-model="expense.non_travel_expenses" v-on:click="submitForm(expense)" />
+                </md-input-container>
+
+                <div>
+                  <md-button type="button" class="md-primary" :disabled="!expenseReady" v-on:click="submitForm(expense)">Submit</md-button>
+                </div>
+              </form>
+            </div>
+          </md-tab> <!-- expense -->
+
+        </md-tabs>
+     
+      </div> <!-- .main-content -->
+    </div> <!-- #app -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="js/advocated.js"></script>
+  </body>
+</html>
