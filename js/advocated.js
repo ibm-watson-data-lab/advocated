@@ -79,6 +79,14 @@ const app = new Vue({
     } else {
       err = 'You are not logged in. Please type /advocated into Slack to get a login link'
     }
+    var today = todayStr();
+    this.attended.dtstart = today;
+    this.attended.dtend = today;
+    this.presented.dtstart = today;
+    this.blogged.dtstart = today;
+    this.press.dtstart = today;
+    this.expense.dtstart = today;
+    
   },
   computed: {
     bloggedReady: function() {
@@ -98,6 +106,9 @@ const app = new Vue({
     }
   },
   methods: {
+    onChangeTab: (tabIndex) => {
+      console.log('onChange is triggered', tabIndex);
+    },
     submitForm: (doc) => {
       if (typeof doc.attendees === 'string') {
         doc.attendees = parseInt(doc.attendees);

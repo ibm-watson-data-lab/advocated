@@ -22,7 +22,7 @@
         </md-snackbar>
         <div v-if="err"> {{ err }} </div>
 
-        <md-tabs v-if="cookie">
+        <md-tabs v-if="cookie" @change="onChangeTab">
           <md-tab id="tab-home" md-label="Home">
             Home Tab
           </md-tab>

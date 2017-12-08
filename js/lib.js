@@ -31,4 +31,10 @@ var getCookies = function() {
   } else {
     return null;
   }
-}
+};
+
+var todayStr = function() {
+  var now = new Date();
+  var todayUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  return todayUTC.toISOString().slice(0, 10);
+};
