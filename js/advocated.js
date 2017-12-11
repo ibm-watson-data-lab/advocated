@@ -3,6 +3,7 @@ Vue.use(VueMaterial)
 const app = new Vue({
   el: '#app',
   data: {
+    events: [],
     attended: {
       _id: '',
       _rev: '',
@@ -107,6 +108,16 @@ const app = new Vue({
   },
   methods: {
     onChangeTab: (tabIndex) => {
+      if (tabIndex === 2) {
+        ajax('userevents', { cookie: app.cookie}, function(err, data) {
+          console.log('ajax userevents', err, data)
+          if (err) {
+            this.err = 'Failed to retrieve user events';
+          } else {
+            app.events = data.rows;
+          }
+        });
+      }
       console.log('onChange is triggered', tabIndex);
     },
     submitForm: (doc) => {

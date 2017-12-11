@@ -111,6 +111,13 @@
                 </md-input-container>
 
                 <md-input-container>
+                  <label for="event">Event</label>
+                  <md-select name="event" id="event" v-model="presented.event">
+                    <md-option v-for="event in events"  value="event.id" :key="event.id" required>{{ event.value }}</md-option>
+                  </md-select>
+                </md-input-container>
+
+                <md-input-container>
                   <label for="dtstart">Date Start</label>
                   <md-input name="dtstart" type="date" id="presented-dtstart" v-model="presented.dtstart" required />
                 </md-input-container>
