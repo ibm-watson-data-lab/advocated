@@ -22,4 +22,6 @@ bx wsk api create /advocated /login post advocated/login --response-type http
 bx wsk api create /advocated /verify post advocated/verify --response-type http
 bx wsk api create /advocated /submit post advocated/submit --response-type http
 bx wsk api create /advocated /userevents post advocated/userevents --response-type http
+bx wsk api create /advocated /userdocs post advocated/userdocs --response-type http
+bx wsk api create /advocated /getbyid post advocated/getbyid --response-type http
 

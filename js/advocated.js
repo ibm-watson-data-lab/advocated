@@ -3,6 +3,8 @@ Vue.use(VueMaterial)
 const app = new Vue({
   el: '#app',
   data: {
+    selectedTab: 0,
+    recent: [],
     events: [],
     attended: {
       _id: '',
@@ -76,7 +78,7 @@ const app = new Vue({
   mounted: function() {
     var jar = getCookies();
     if (jar.advocatedtoken) {
-      this.cookie = jar.advocatedtoken
+      this.cookie = jar.advocatedtoken;
     } else {
       err = 'You are not logged in. Please type /advocated into Slack to get a login link'
     }
@@ -117,8 +119,58 @@ const app = new Vue({
             app.events = data.rows;
           }
         });
+      } else if (tabIndex === 0) {
+        app.getRecentDocs();
       }
       console.log('onChange is triggered', tabIndex);
+      app.selectedTab = -1;
+    },
+    onSelect: (id) => {
+      console.log('onSelect', id);
+      ajax('getbyid', { cookie: app.cookie, id: id}, (err, data) => {
+        console.log('ajax getbyid', err, data)
+        if (err) {
+          app.err = 'Failed to getbyid';
+        } else {
+          switch(data.collection) {
+            case 'event': 
+              app.selectedTab = 1;
+              app.attended = data;
+            break;
+            case 'session':
+              app.selectedTab = 2;
+              app.presented = data;
+            break;
+            case 'blog':
+              app.selectedTab = 3;
+              app.blogged = data;
+            break;
+            case 'press':
+              app.selectedTab = 4;
+              app.press = data;
+            break;
+            case 'expense':
+              app.selectedTab = 5;
+              app.expense = data;
+            break;
+
+          }
+          console.log(data);
+        }
+      });
+    },
+    getRecentDocs: () => {
+      ajax('userdocs', { cookie: app.cookie}, (err, data) => {
+        console.log('ajax userdocs', err, data)
+        if (err) {
+          app.err = 'Failed to retrieve recent user docs';
+        } else {
+          app.recent = [];
+          for(var i in data.rows) {
+            app.recent.push(data.rows[i].doc);
+          }
+        }
+      });
     },
     submitForm: (doc) => {
       if (typeof doc.attendees === 'string') {
@@ -152,6 +204,7 @@ const app = new Vue({
           doc._rev = data.rev;
           app.msg = 'Thank you for advocating!';
           app.$refs.snackbar.open();
+          app.selectedTab = 0;
         }
 
       });

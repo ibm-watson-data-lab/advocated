@@ -23,11 +23,47 @@
         <div v-if="err"> {{ err }} </div>
 
         <md-tabs v-if="cookie" @change="onChangeTab">
-          <md-tab id="tab-home" md-label="Home">
-            Home Tab
+          <md-tab id="tab-home" md-label="Home" :md-active="selectedTab===0">
+            <md-card>
+              <md-card-media>
+                <img src="img/header.jpg" alt="presentation" credit="https://www.flickr.com/photos/gustavthree/4357263157/in/photolist-7D37wR-UoXktx-JouTz-2QqP2E-bj4gFg-rP5f-bj4aPX-bj4cek-49kfUy-52Quva-4yseR7-557PzY-jksp9-8xWLVc-52Qxx6-7QJaPh-cac8Mu-bZzJbG-avgWf7-rMX21F-8UhTMY-4yEPDN-5vGLy-dFEWMj-bj4kV8-nCxryA-6owKC3-eeR2qo-e8q9dZ-bZzGsJ-bj4fUB-mMzwwt-rxREMK-rQj7SP-rQecC6-2ogN-rxRCE8-sbP3yW-bD6QQy-4zt9gs-5YpzDi-hQYGN-7EdoAN-hPcGAT-5a1Pbi-bZzKxS-jMniJp-7E9xFz-no6Vw6-54Fttf">
+              </md-card-media>
+            
+              <md-card-header>
+                <div class="md-title">/advocated</div>
+                <div class="md-subhead">Attend, Present, Blog</div>
+              </md-card-header>
+            
+              <md-card-content>
+                Record your developer advocacy activity with this tool. Every time your attend a conference or meetup, speak or present, publish a
+                blog post, talk to the press or spend some of our budget, record that activity here.
+              </md-card-content>
+            </md-card>
+
+            <div v-if="recent.length > 0">
+                <h3 >Recent entries</h3>
+                <md-table>
+                  <md-table-header>
+                    <md-table-row>
+                      <md-table-head>Date</md-table-head>
+                      <md-table-head>Type</md-table-head>
+                      <md-table-head>Title</md-table-head>
+                    </md-table-row>
+                  </md-table-header>
+                
+                  <md-table-body>
+                    <md-table-row v-for="r in recent" :key="r._id">
+                      <md-table-cell>{{ r.dtstart }}</md-table-cell>
+                      <md-table-cell>{{ r.collection }}</md-table-cell>
+                      <md-table-cell>{{ r.title }}</md-table-cell>
+                      <md-table-cell><a href="#" v-on:click="onSelect(r._id)"><md-icon>mode_edit</md-icon></a></md-table-cell>
+                    </md-table-row>
+                  </md-table-body>
+                </md-table>
+              </div>
           </md-tab>
 
-          <md-tab id="tab-attended" md-label="Attended">
+          <md-tab id="tab-attended" md-label="Attended" :md-active="selectedTab===1">
             <div>
               <h2>I attended an Event</h2>
               <form novalidate>
@@ -96,7 +132,7 @@
           </md-tab> <!-- attended -->
 
 
-          <md-tab id="tab-presented" md-label="Presented">
+          <md-tab id="tab-presented" md-label="Presented" :md-active="selectedTab===2">
             <div>
               <h2>I presented at an Event</h2>
               <form novalidate>
@@ -158,7 +194,7 @@
             </div>
           </md-tab> <!-- presented -->
 
-          <md-tab id="tab-blogged" md-label="Blogged">
+          <md-tab id="tab-blogged" md-label="Blogged" :md-active="selectedTab===3">
             <div>
               <h2>I published a blog</h2>
               <form novalidate>
@@ -195,7 +231,7 @@
             </div>
           </md-tab> <!-- blogged -->
 
-          <md-tab id="tab-press" md-label="Press">
+          <md-tab id="tab-press" md-label="Press" :md-active="selectedTab===4">
             <div>
               <h2>I spoke to the press</h2>
               <form novalidate>
@@ -241,7 +277,7 @@
             </div>
           </md-tab> <!-- press -->
 
-          <md-tab id="tab-expense" md-label="Expense">
+          <md-tab id="tab-expense" md-label="Expense" :md-active="selectedTab===5">
             <div>
               <h2>I spent some money</h2>
               <form novalidate>
