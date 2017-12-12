@@ -1,9 +1,30 @@
 Vue.use(VueMaterial)
 
+var resetForms = function() {
+  var today = todayStr();
+  app.attended.dtstart = today;
+  app.attended.dtend = today;
+  app.presented.dtstart = today;
+  app.blogged.dtstart = today;
+  app.press.dtstart = today;
+  app.expense.dtstart = today;
+  app.attended.attendees = app.presented.attendees = 0;
+  app.attended.latitude = app.attended.longitude = 0.0;
+  app.press.outlet = '';
+  app.blogged.url = app.press.url = '';
+  app.attended._id = app.attended._rev = app.attended.title = app.attended.description = app.attended.tags = app.attended.comments = '';
+  app.presented._id = app.presented._rev = app.presented.title = app.presented.description = app.presented.tags = app.presented.comments = '';
+  app.blogged._id = app.blogged._rev = app.blogged.title = app.blogged.description = app.blogged.tags = app.blogged.comments = '';
+  app.press._id = app.press._rev = app.press.title = app.press.description = app.press.tags = app.press.comments = '';
+  app.expense._id = app.expense._rev = app.expense.title = app.expense.description = app.expense.tags = app.expense.comments = '';
+};
+
 const app = new Vue({
   el: '#app',
   data: {
-    selectedTab: 0,
+    spinning: false,
+    editmode: false,
+    selectedTab: -1,
     recent: [],
     events: [],
     attended: {
@@ -64,6 +85,7 @@ const app = new Vue({
       _rev: '',
       collection: 'expense',
       title: '',
+      event: '',
       dtstart: '2017-11-30',
       comments: '',
       travel_expenses_currency: 'USD',
@@ -82,14 +104,6 @@ const app = new Vue({
     } else {
       err = 'You are not logged in. Please type /advocated into Slack to get a login link'
     }
-    var today = todayStr();
-    this.attended.dtstart = today;
-    this.attended.dtend = today;
-    this.presented.dtstart = today;
-    this.blogged.dtstart = today;
-    this.press.dtstart = today;
-    this.expense.dtstart = today;
-    
   },
   computed: {
     bloggedReady: function() {
@@ -110,7 +124,7 @@ const app = new Vue({
   },
   methods: {
     onChangeTab: (tabIndex) => {
-      if (tabIndex === 2) {
+      if (tabIndex === 2 || tabIndex === 5) {
         ajax('userevents', { cookie: app.cookie}, function(err, data) {
           console.log('ajax userevents', err, data)
           if (err) {
@@ -123,15 +137,23 @@ const app = new Vue({
         app.getRecentDocs();
       }
       console.log('onChange is triggered', tabIndex);
+      console.log('editmode', app.editmode)
+      if (!app.editmode) {
+        resetForms();
+      }
       app.selectedTab = -1;
+      app.editmode = false;
     },
     onSelect: (id) => {
       console.log('onSelect', id);
+      app.spinning = true;
       ajax('getbyid', { cookie: app.cookie, id: id}, (err, data) => {
         console.log('ajax getbyid', err, data)
+        app.spinning = false;
         if (err) {
           app.err = 'Failed to getbyid';
         } else {
+          app.editmode = true;
           switch(data.collection) {
             case 'event': 
               app.selectedTab = 1;

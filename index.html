@@ -13,6 +13,10 @@
       <!-- Your code here -->
       <md-toolbar class="md-primary">
         <h2 class="md-title" style="flex: 1;">/advocated</h2>
+        <md-button class="md-icon-button" v-if="spinning">
+          <md-spinner md-indeterminate class="md-accent"></md-spinner>
+        </md-button>
+        
       </md-toolbar>
 
       <div class="main-content">
@@ -148,8 +152,8 @@
 
                 <md-input-container>
                   <label for="event">Event</label>
-                  <md-select name="event" id="event" v-model="presented.event">
-                    <md-option v-for="event in events"  value="event.id" :key="event.id" required>{{ event.value }}</md-option>
+                  <md-select name="event" id="presented-event" v-model="presented.event" required>
+                    <md-option v-for="event in events"  :value="event.id" :key="event.id">{{ event.value }}</md-option>
                   </md-select>
                 </md-input-container>
 
@@ -290,6 +294,14 @@
                   <label for="title">Title</label>
                   <md-input name="title" id="expense-title" v-model="expense.title" required />
                 </md-input-container>
+
+                <md-input-container>
+                    <label for="event">Event</label>
+                    <md-select name="event" id="expenseevent" v-model="expense.event" required>
+                      <md-option value="" :key="0">--None--</md-option>
+                      <md-option v-for="event in events"  :value="event.id" :key="event.id" >{{ event.value }}</md-option>
+                    </md-select>
+                  </md-input-container>
 
                 <md-input-container>
                   <label for="dtstart">Date</label>
