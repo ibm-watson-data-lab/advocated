@@ -22,6 +22,7 @@ var resetForms = function() {
 const app = new Vue({
   el: '#app',
   data: {
+    gotit: false,
     spinning: false,
     editmode: false,
     selectedTab: -1,

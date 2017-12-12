@@ -28,7 +28,7 @@
 
         <md-tabs v-if="cookie" @change="onChangeTab">
           <md-tab id="tab-home" md-label="Home" :md-active="selectedTab===0">
-            <md-card>
+            <md-card v-if="!gotit">
               <md-card-media>
                 <img src="img/header.jpg" alt="presentation" credit="https://www.flickr.com/photos/gustavthree/4357263157/in/photolist-7D37wR-UoXktx-JouTz-2QqP2E-bj4gFg-rP5f-bj4aPX-bj4cek-49kfUy-52Quva-4yseR7-557PzY-jksp9-8xWLVc-52Qxx6-7QJaPh-cac8Mu-bZzJbG-avgWf7-rMX21F-8UhTMY-4yEPDN-5vGLy-dFEWMj-bj4kV8-nCxryA-6owKC3-eeR2qo-e8q9dZ-bZzGsJ-bj4fUB-mMzwwt-rxREMK-rQj7SP-rQecC6-2ogN-rxRCE8-sbP3yW-bD6QQy-4zt9gs-5YpzDi-hQYGN-7EdoAN-hPcGAT-5a1Pbi-bZzKxS-jMniJp-7E9xFz-no6Vw6-54Fttf">
               </md-card-media>
@@ -37,11 +37,23 @@
                 <div class="md-title">/advocated</div>
                 <div class="md-subhead">Attend, Present, Blog</div>
               </md-card-header>
-            
+
               <md-card-content>
                 Record your developer advocacy activity with this tool. Every time your attend a conference or meetup, speak or present, publish a
                 blog post, talk to the press or spend some of our budget, record that activity here.
+                <h3>How do I log in?</h3>
+                Simply type:
+                <pre>
+                  /advocated
+                </pre>
+                in the IBM Watson Data Platform Slack. Follow the link it gives you and you are then logged in. Bookmark this page to revisit /advocated
+                at a later date. Then you can enter as many /advocated entries as you like. They will be recorded in a Cloudant database
+                and analysed later using DSX notebooks.
               </md-card-content>
+
+              <md-card-actions>
+                <md-button v-on:click="gotit=true">Got it</md-button>
+              </md-card-actions>
             </md-card>
 
             <div v-if="recent.length > 0">
