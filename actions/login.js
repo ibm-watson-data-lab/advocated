@@ -14,7 +14,7 @@ const main = function(msg) {
       ts: (new Date()).getTime()
     };
     return db.insert(obj).then(function(data) {
-      return utils.reply('Welcome to `/advocated`! Please login with ' + msg.APP_URL + '?' + data.id, 'text/plain')
+      return utils.reply('Welcome to `/advocated`! Please login with ' + msg.APP_URL + '/login.html#' + data.id, 'text/plain')
     })
   } else {
     return utils.error('oh no. something went wrong', 'text/plain')

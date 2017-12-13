@@ -13,6 +13,7 @@ const app = new Vue({
           this.err = 'Invalid Token';
         } else {
           document.cookie = 'advocatedtoken=' + hash;
+          window.location.hash="";
           window.location.pathname="/";
         }
 

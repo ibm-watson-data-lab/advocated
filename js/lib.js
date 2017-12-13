@@ -33,6 +33,10 @@ var getCookies = function() {
   }
 };
 
+var clearCookies = function() {
+  document.cookie = 'advocatedtoken=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+};
+
 var todayStr = function() {
   var now = new Date();
   var todayUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));

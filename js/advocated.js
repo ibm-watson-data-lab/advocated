@@ -22,6 +22,8 @@ var resetForms = function() {
 const app = new Vue({
   el: '#app',
   data: {
+    user_name: '',
+    user_id: '',
     gotit: false,
     spinning: false,
     editmode: false,
@@ -100,11 +102,21 @@ const app = new Vue({
   },
   mounted: function() {
     var jar = getCookies();
-    if (jar.advocatedtoken) {
+    if (jar && jar.advocatedtoken) {
       this.cookie = jar.advocatedtoken;
+      ajax('verify', { cookie: this.cookie}, (err, data) => {
+        console.log('ajax verify', err, data)
+        if (err) {
+          this.err = 'Failed to retrieve user events';
+        } else {
+          this.user_id = data.user_id;
+          this.user_name = data.user_name;
+        }
+      });
     } else {
       err = 'You are not logged in. Please type /advocated into Slack to get a login link'
     }
+
   },
   computed: {
     bloggedReady: function() {
@@ -195,6 +207,19 @@ const app = new Vue({
         }
       });
     },
+    onDelete: (id, rev) => {
+      console.log('on delete', id, rev);
+      ajax('deletebyid', { cookie: app.cookie, id: id, rev: rev}, (err, data) => {
+        console.log('ajax deletebyid', err, data)
+        if (err) {
+          app.err = 'Failed to delete document';
+        } else {
+          app.msg = 'Document deleted';
+          app.$refs.snackbar.open();
+          app.selectedTab = 0;
+        }
+      });
+    },
     submitForm: (doc) => {
       if (typeof doc.attendees === 'string') {
         doc.attendees = parseInt(doc.attendees);
@@ -231,6 +256,11 @@ const app = new Vue({
         }
 
       });
+    },
+    logout: () => {
+      console.log('logout');
+       clearCookies();
+       app.cookie = '';
     }
   }
 })

@@ -8,7 +8,7 @@ const main = function(msg) {
 
   if (msg.cookie) {
     return db.get(msg.cookie).then(function(data) {
-      return utils.reply({ok: true});
+      return utils.reply({ok: true, user_name: data.user_name, user_id: data.user_id});
     }).catch(function(e) {
       return utils.error({ok: false});
     });
