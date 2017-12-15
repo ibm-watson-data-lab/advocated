@@ -261,6 +261,7 @@ const app = new Vue({
       console.log('logout');
        clearCookies();
        app.cookie = '';
+       app.gotit = false;
     }
   }
 })

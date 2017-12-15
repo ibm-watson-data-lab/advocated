@@ -10,6 +10,13 @@ var userDocs = function(doc) {
   emit([doc.user_id, doc.dtstart], doc.title);
 };
 
+// this function is purely for filtered replication
+// It allows continuous replication from the core database to 
+// other secondary databases that only contain one collection.
+var bycollection = function(doc, req) {
+  return (doc.collection === req.query.collection);
+};
+
 module.exports = {
   _id: "_design/report",
   views: {
@@ -21,5 +28,8 @@ module.exports = {
       map: userDocs.toString(),
       reduce: "_count"
     }
+  },
+  filters: {
+    bycollection: bycollection.toString()
   }
 };
