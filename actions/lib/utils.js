@@ -17,8 +17,6 @@ var removeOpenWhiskParams = function(msg) {
   delete msg.__ow_path;
   delete msg.COUCH_HOST;
   delete msg.COUCH_DATABASE;
-  delete msg.SLACK_TOKEN;
-  delete msg.APP_URL;
   delete msg.cookie;
   return msg;
 };

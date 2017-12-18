@@ -15,8 +15,8 @@ const main = function(msg) {
       msg = utils.removeOpenWhiskParams(msg);
 
       // add user details
-      msg.teamid = data.team_id;
-      msg.userid = data.user_id;
+      msg.teamid = data.teamid;
+      msg.userid = data.userid;
       msg.userDisplayName = data.user_name;
 
       // remove empty fields

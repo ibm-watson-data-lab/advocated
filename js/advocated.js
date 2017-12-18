@@ -22,8 +22,8 @@ var resetForms = function() {
 const app = new Vue({
   el: '#app',
   data: {
-    user_name: '',
-    user_id: '',
+    userDisplayName: '',
+    userid: '',
     gotit: false,
     spinning: false,
     editmode: false,
@@ -106,17 +106,14 @@ const app = new Vue({
       this.cookie = jar.advocatedtoken;
       ajax('verify', { cookie: this.cookie}, (err, data) => {
         console.log('ajax verify', err, data)
-        if (err) {
-          this.err = 'Failed to retrieve user events';
-        } else {
-          this.user_id = data.user_id;
-          this.user_name = data.user_name;
+        if (!err) {
+          this.userid = data.userid;
+          this.userDisplayName = data.userDisplayName;
         }
       });
     } else {
       err = 'You are not logged in. Please type /advocated into Slack to get a login link'
     }
-
   },
   computed: {
     bloggedReady: function() {
@@ -141,7 +138,7 @@ const app = new Vue({
         ajax('userevents', { cookie: app.cookie}, function(err, data) {
           console.log('ajax userevents', err, data)
           if (err) {
-            this.err = 'Failed to retrieve user events';
+            //this.err = 'Failed to retrieve user events';
           } else {
             app.events = data.rows;
           }

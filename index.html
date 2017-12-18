@@ -18,9 +18,9 @@
           <md-spinner md-indeterminate class="md-accent"></md-spinner>
         </md-button>
         
-        <h4 v-if="cookie">{{ user_name }} ({{ user_id }})</h4>
+        <h4 v-if="cookie && userid">{{ userDisplayName }}</h4>
 
-        <md-button v-if="cookie" v-on:click="logout">Logout</md-button>
+        <md-button v-if="cookie && userid" v-on:click="logout">Logout</md-button>
         
       </md-toolbar>
 

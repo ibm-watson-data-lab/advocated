@@ -14,8 +14,8 @@ const main = function(msg) {
     return tokensdb.get(msg.cookie).then(function(data) {
 
       var opts = {
-        startkey: [data.user_id, '2099-01-01'],
-        endkey: [data.user_id, '1970-01-01'],
+        startkey: [data.userid, '2099-01-01'],
+        endkey: [data.userid, '1970-01-01'],
         descending: true,
         reduce: false,
         limit: 50
