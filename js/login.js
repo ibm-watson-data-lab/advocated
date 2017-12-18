@@ -14,7 +14,7 @@ const app = new Vue({
         } else {
           document.cookie = 'advocatedtoken=' + hash;
           window.location.hash="";
-          window.location.pathname="/";
+          window.location.pathname="index.html";
         }
 
       });
