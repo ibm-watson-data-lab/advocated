@@ -1,4 +1,9 @@
-var apibase = 'https://service.us.apiconnect.ibmcloud.com/gws/apigateway/api/208a8d87f8067eeaa6751e18e1c4efba314ef5ec38793779f4b582b5d6074435/advocated/';
+
+// glynn's account
+// var apibase = 'https://service.us.apiconnect.ibmcloud.com/gws/apigateway/api/208a8d87f8067eeaa6751e18e1c4efba314ef5ec38793779f4b582b5d6074435/advocated/';
+
+// live account
+var apibase = 'https://service.us.apiconnect.ibmcloud.com/gws/apigateway/api/0af88152a559b200f60971ed0195d0dcffa46ab5f5f7ad25c6ad512ffd6b3240/advocated/'
 
 var ajax = function(method, data, callback) {
   //console.log('ajax', method, data);

@@ -16,7 +16,7 @@ ls *.js | tr '\n' '\0' | xargs -0 -n1 ./deploy_action.sh
 cd ..
 
 # create API
-bx wsk api create /advocated /login post advocated/login --response-type http
+#bx wsk api create /advocated /login post advocated/login --response-type http
 bx wsk api create /advocated /verify post advocated/verify --response-type http
 bx wsk api create /advocated /submit post advocated/submit --response-type http
 bx wsk api create /advocated /userevents post advocated/userevents --response-type http

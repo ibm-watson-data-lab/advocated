@@ -37,6 +37,10 @@ Make a note of the URL where your actions are served out as an API.
 
 The API of your serverless application is configured at the top of `js/lib.js`.
 
+## Web application
+
+The contents of the `gh-pages` branch are served out automatically at https://ibm-watson-data-lab.github.io/advocated.
+
 ## Replication
 
 To replicate just the blogs from the main database to a `blogs` database, you can create a document in the `_replicator` database like this:
