@@ -31,33 +31,35 @@
         </md-snackbar>
         <div v-if="err"> {{ err }} </div>
 
-        <md-card v-if="!gotit">
-          <md-card-media>
-            <img src="img/header.jpg" alt="presentation" credit="https://www.flickr.com/photos/gustavthree/4357263157/in/photolist-7D37wR-UoXktx-JouTz-2QqP2E-bj4gFg-rP5f-bj4aPX-bj4cek-49kfUy-52Quva-4yseR7-557PzY-jksp9-8xWLVc-52Qxx6-7QJaPh-cac8Mu-bZzJbG-avgWf7-rMX21F-8UhTMY-4yEPDN-5vGLy-dFEWMj-bj4kV8-nCxryA-6owKC3-eeR2qo-e8q9dZ-bZzGsJ-bj4fUB-mMzwwt-rxREMK-rQj7SP-rQecC6-2ogN-rxRCE8-sbP3yW-bD6QQy-4zt9gs-5YpzDi-hQYGN-7EdoAN-hPcGAT-5a1Pbi-bZzKxS-jMniJp-7E9xFz-no6Vw6-54Fttf">
-          </md-card-media>
-        
-          <md-card-header>
-            <div class="md-title">/advocated</div>
-            <div class="md-subhead">Attend, Present, Blog</div>
-          </md-card-header>
+        <md-tabs @change="onChangeTab">
 
-          <md-card-content>
-            Record your developer advocacy activity with this tool. Every time your attend a conference or meetup, speak or present, publish a
-            blog post, talk to the press or spend some of our budget, record that activity here.
-            <h3>How do I log in?</h3>
-            Ask Glynn for a URL, then bookmark this page for future reference.
-            You can enter as many /advocated entries as you like. They will be recorded in a Cloudant database
-            and analysed later using DSX notebooks.
-          </md-card-content>
-
-          <md-card-actions v-if="cookie">
-            <md-button v-on:click="gotit=true" >Got it</md-button>
-          </md-card-actions>
-        </md-card>
-
-        <md-tabs  v-if="cookie && gotit"  @change="onChangeTab">
           <md-tab id="tab-home" md-label="Home" :md-active="selectedTab===0">
+            <md-card>
+              <md-card-media>
+                <img src="img/header.jpg" alt="presentation" credit="https://www.flickr.com/photos/gustavthree/4357263157/in/photolist-7D37wR-UoXktx-JouTz-2QqP2E-bj4gFg-rP5f-bj4aPX-bj4cek-49kfUy-52Quva-4yseR7-557PzY-jksp9-8xWLVc-52Qxx6-7QJaPh-cac8Mu-bZzJbG-avgWf7-rMX21F-8UhTMY-4yEPDN-5vGLy-dFEWMj-bj4kV8-nCxryA-6owKC3-eeR2qo-e8q9dZ-bZzGsJ-bj4fUB-mMzwwt-rxREMK-rQj7SP-rQecC6-2ogN-rxRCE8-sbP3yW-bD6QQy-4zt9gs-5YpzDi-hQYGN-7EdoAN-hPcGAT-5a1Pbi-bZzKxS-jMniJp-7E9xFz-no6Vw6-54Fttf">
+              </md-card-media>
+            
+              <md-card-header>
+                <div class="md-title">/advocated</div>
+                <div class="md-subhead">Attend, Present, Blog</div>
+              </md-card-header>
+    
+              <md-card-content>
+                Record your developer advocacy activity with this tool. Every time your attend a conference or meetup, speak or present, publish a
+                blog post, talk to the press or spend some of our budget, record that activity here.
+                <h3>How do I log in?</h3>
+                Ask Glynn for a URL, then bookmark this page for future reference.
+                You can enter as many /advocated entries as you like. They will be recorded in a Cloudant database
+                and analysed later using DSX notebooks.
+              </md-card-content>
+    
+            </md-card>
+          </md-tab>
 
+          <md-tab v-if="cookie" id="tab-recent" md-label="Recent" :md-active="selectedTab===1">
+            <div v-if="cookie && recent.length == 0">
+              You have no recent /adovcated entries
+            </div>
             <div v-if="cookie && recent.length > 0">
                 <h3 >Recent entries</h3>
                 <md-table>
@@ -81,7 +83,7 @@
               </div>
           </md-tab>
 
-          <md-tab id="tab-attended" md-label="Attended" :md-active="selectedTab===1">
+          <md-tab v-if="cookie" id="tab-attended" md-label="Attended" :md-active="selectedTab===2">
             <div>
               <h2>I attended an Event <a v-if="attended._id && attended._rev" href="#" v-on:click="onDelete(attended._id, attended._rev)"><md-icon>delete</md-icon></a></h2>
               <form novalidate>
@@ -150,7 +152,7 @@
           </md-tab> <!-- attended -->
 
 
-          <md-tab id="tab-presented" md-label="Presented" :md-active="selectedTab===2">
+          <md-tab v-if="cookie" id="tab-presented" md-label="Presented" :md-active="selectedTab===3">
             <div>
               <h2>I presented at an Event <a v-if="presented._id && presented._rev" href="#" v-on:click="onDelete(presented._id, presented._rev)"><md-icon>delete</md-icon></a></h2>
               <form novalidate>
@@ -212,7 +214,7 @@
             </div>
           </md-tab> <!-- presented -->
 
-          <md-tab id="tab-blogged" md-label="Blogged" :md-active="selectedTab===3">
+          <md-tab v-if="cookie" id="tab-blogged" md-label="Blogged" :md-active="selectedTab===4">
             <div>
               <h2>I published a blog <a v-if="blogged._id && blogged._rev" href="#" v-on:click="onDelete(blogged._id, blogged._rev)"><md-icon>delete</md-icon></a></h2>
               <form novalidate>
@@ -249,7 +251,7 @@
             </div>
           </md-tab> <!-- blogged -->
 
-          <md-tab id="tab-press" md-label="Press" :md-active="selectedTab===4">
+          <md-tab v-if="cookie" id="tab-press" md-label="Press" :md-active="selectedTab===5">
             <div>
               <h2>I spoke to the press <a v-if="press._id && press._rev" href="#" v-on:click="onDelete(press._id, press._rev)"><md-icon>delete</md-icon></a></h2>
               <form novalidate>
@@ -295,7 +297,7 @@
             </div>
           </md-tab> <!-- press -->
 
-          <md-tab id="tab-expense" md-label="Expense" :md-active="selectedTab===5">
+          <md-tab v-if="cookie" id="tab-expense" md-label="Expense" :md-active="selectedTab===6">
             <div>
               <h2>I spent some money <a v-if="expense._id && expense._rev" href="#" v-on:click="onDelete(expense._id, expense._rev)"><md-icon>delete</md-icon></a></h2>
               <form novalidate>

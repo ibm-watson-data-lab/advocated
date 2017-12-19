@@ -1,33 +1,13 @@
-Vue.use(VueMaterial)
-
-var resetForms = function() {
-  var today = todayStr();
-  app.attended.dtstart = today;
-  app.attended.dtend = today;
-  app.presented.dtstart = today;
-  app.blogged.dtstart = today;
-  app.press.dtstart = today;
-  app.expense.dtstart = today;
-  app.attended.attendees = app.presented.attendees = 0;
-  app.attended.latitude = app.attended.longitude = 0.0;
-  app.press.outlet = '';
-  app.blogged.url = app.press.url = '';
-  app.attended._id = app.attended._rev = app.attended.title = app.attended.description = app.attended.tags = app.attended.comments = '';
-  app.presented._id = app.presented._rev = app.presented.title = app.presented.description = app.presented.tags = app.presented.comments = '';
-  app.blogged._id = app.blogged._rev = app.blogged.title = app.blogged.description = app.blogged.tags = app.blogged.comments = '';
-  app.press._id = app.press._rev = app.press.title = app.press.description = app.press.tags = app.press.comments = '';
-  app.expense._id = app.expense._rev = app.expense.title = app.expense.description = app.expense.tags = app.expense.comments = '';
-};
+Vue.use(VueMaterial) 
 
 const app = new Vue({
   el: '#app',
   data: {
     userDisplayName: '',
     userid: '',
-    gotit: false,
     spinning: false,
     editmode: false,
-    selectedTab: -1,
+    selectedTab: 0,
     recent: [],
     events: [],
     attended: {
@@ -133,8 +113,28 @@ const app = new Vue({
     }
   },
   methods: {
+    resetForms: () => {
+      var today = todayStr();
+      app.attended.dtstart = today;
+      app.attended.dtend = today;
+      app.presented.dtstart = today;
+      app.blogged.dtstart = today;
+      app.press.dtstart = today;
+      app.expense.dtstart = today;
+      app.attended.attendees = app.presented.attendees = 0;
+      app.attended.latitude = app.attended.longitude = 0.0;
+      app.press.outlet = '';
+      app.blogged.url = app.press.url = '';
+      app.attended._id = app.attended._rev = app.attended.title = app.attended.description = app.attended.tags = app.attended.comments = '';
+      app.presented._id = app.presented._rev = app.presented.title = app.presented.description = app.presented.tags = app.presented.comments = '';
+      app.blogged._id = app.blogged._rev = app.blogged.title = app.blogged.description = app.blogged.tags = app.blogged.comments = '';
+      app.press._id = app.press._rev = app.press.title = app.press.description = app.press.tags = app.press.comments = '';
+      app.expense._id = app.expense._rev = app.expense.title = app.expense.description = app.expense.tags = app.expense.comments = '';
+    },
     onChangeTab: (tabIndex) => {
-      if (tabIndex === 2 || tabIndex === 5) {
+      if (tabIndex == 0) return;
+      app.selectedTab = tabIndex;
+      if (tabIndex === 3 || tabIndex === 6) {
         ajax('userevents', { cookie: app.cookie}, function(err, data) {
           console.log('ajax userevents', err, data)
           if (err) {
@@ -143,15 +143,16 @@ const app = new Vue({
             app.events = data.rows;
           }
         });
-      } else if (tabIndex === 0) {
+      } else if (tabIndex === 1) {
         app.getRecentDocs();
       }
       console.log('onChange is triggered', tabIndex);
       console.log('editmode', app.editmode)
       if (!app.editmode) {
-        resetForms();
+        console.log('resetting the form')
+        app.resetForms();
       }
-      app.selectedTab = -1;
+     
       app.editmode = false;
     },
     onSelect: (id) => {
@@ -166,23 +167,23 @@ const app = new Vue({
           app.editmode = true;
           switch(data.collection) {
             case 'event': 
-              app.selectedTab = 1;
+              app.selectedTab = 2;
               app.attended = data;
             break;
             case 'session':
-              app.selectedTab = 2;
+              app.selectedTab = 3;
               app.presented = data;
             break;
             case 'blog':
-              app.selectedTab = 3;
+              app.selectedTab = 4;
               app.blogged = data;
             break;
             case 'press':
-              app.selectedTab = 4;
+              app.selectedTab = 5;
               app.press = data;
             break;
             case 'expense':
-              app.selectedTab = 5;
+              app.selectedTab = 6;
               app.expense = data;
             break;
 
@@ -213,7 +214,7 @@ const app = new Vue({
         } else {
           app.msg = 'Document deleted';
           app.$refs.snackbar.open();
-          app.selectedTab = 0;
+          app.selectedTab = 1;
         }
       });
     },
@@ -249,7 +250,7 @@ const app = new Vue({
           doc._rev = data.rev;
           app.msg = 'Thank you for advocating!';
           app.$refs.snackbar.open();
-          app.selectedTab = 0;
+          app.selectedTab = 1;
         }
 
       });
@@ -258,7 +259,6 @@ const app = new Vue({
       console.log('logout');
        clearCookies();
        app.cookie = '';
-       app.gotit = false;
     }
   }
 })

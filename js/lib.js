@@ -18,7 +18,7 @@ var ajax = function(method, data, callback) {
       callback(true, null);
     },
     success: function(d) {
-  //    console.log('ajax success', d)
+      console.log('ajax success', d.title)
       callback(null, d)
     }
   });
