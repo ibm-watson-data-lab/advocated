@@ -84,7 +84,9 @@ const app = new Vue({
     var jar = getCookies();
     if (jar && jar.advocatedtoken) {
       this.cookie = jar.advocatedtoken;
+      this.spinning = true;
       ajax('verify', { cookie: this.cookie}, (err, data) => {
+        this.spinning = false;
         console.log('ajax verify', err, data)
         if (!err) {
           this.userid = data.userid;
@@ -135,7 +137,9 @@ const app = new Vue({
       if (tabIndex == 0) return;
       app.selectedTab = tabIndex;
       if (tabIndex === 3 || tabIndex === 6) {
+        app.spinning = true;
         ajax('userevents', { cookie: app.cookie}, function(err, data) {
+          app.spinning = false;
           console.log('ajax userevents', err, data)
           if (err) {
             //this.err = 'Failed to retrieve user events';
@@ -208,8 +212,10 @@ const app = new Vue({
       });
     },
     onDelete: (id, rev) => {
+      app.spinning = true;
       console.log('on delete', id, rev);
       ajax('deletebyid', { cookie: app.cookie, id: id, rev: rev}, (err, data) => {
+        app.spinning = false;
         console.log('ajax deletebyid', err, data)
         if (err) {
           app.err = 'Failed to delete document';
@@ -243,7 +249,9 @@ const app = new Vue({
       doc.cookie = app.cookie;
 
       // submit to serverless action
+      app.spinning = true;
       ajax('submit', doc, function(err, data) {
+        app.spinning = false;
         console.log('ajax submit', err, data)
         if (err) {
           this.err = 'Failed to save record';
