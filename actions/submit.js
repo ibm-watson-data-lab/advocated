@@ -17,7 +17,7 @@ const main = function(msg) {
       // add user details
       msg.teamid = data.teamid;
       msg.userid = data.userid;
-      msg.userDisplayName = data.user_name;
+      msg.userDisplayName = data.userDisplayName;
 
       // remove empty fields
       if (!msg._id) {
