@@ -166,12 +166,18 @@
                   <md-input name="title" id="presented-title" v-model="presented.title" placeholder="Session Title" required />
                 </md-input-container>
 
-                <md-input-container>
-                  <label for="event">Event</label>
-                  <md-select name="event" id="presented-event" v-model="presented.event" required>
+                <div>
+                  <div for="event">Event</div>
+                  <!--<md-select name="event" id="presented-event" v-model="presented.event" required>
                     <md-option v-for="event in events"  :value="event.id" :key="event.id">{{ event.value }}</md-option>
-                  </md-select>
-                </md-input-container>
+                  </md-select>-->
+                  <div>
+                    <select name="event" id="presented-event" v-model="presented.event" required>
+                        <option v-for="event in events"  :value="event.id" :key="event.id">{{ event.value }}</md-option>
+                    </select>
+                  </div>
+                  <br />
+                </div>
 
                 <md-input-container>
                   <label for="dtstart">Date Start</label>
@@ -310,7 +316,7 @@
                   <label for="title">Title</label>
                   <md-input name="title" id="expense-title" v-model="expense.title" required />
                 </md-input-container>
-
+<!--
                 <md-input-container>
                     <label for="event">Event</label>
                     <md-select name="event" id="expenseevent" v-model="expense.event" required>
@@ -318,6 +324,19 @@
                       <md-option v-for="event in events"  :value="event.id" :key="event.id" >{{ event.value }}</md-option>
                     </md-select>
                   </md-input-container>
+                -->
+
+                
+                <div>
+                  <div for="event">Event</div>
+                  <div>
+                    <select name="event" id="expense-event" v-model="expense.event" required>
+                        <md-option value="" :key="0">--None--</md-option>
+                        <option v-for="event in events"  :value="event.id" :key="event.id">{{ event.value }}</md-option>
+                    </select>
+                  </div>
+                  <br />
+                </div>
 
                 <md-input-container>
                   <label for="dtstart">Date</label>
