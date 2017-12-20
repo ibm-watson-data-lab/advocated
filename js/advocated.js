@@ -193,7 +193,9 @@ const app = new Vue({
       });
     },
     getRecentDocs: () => {
+      app.spinning = true;
       ajax('userdocs', { cookie: app.cookie}, (err, data) => {
+        app.spinning = false;
         console.log('ajax userdocs', err, data)
         if (err) {
           app.err = 'Failed to retrieve recent user docs';
