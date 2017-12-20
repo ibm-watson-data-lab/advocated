@@ -78,7 +78,9 @@ const app = new Vue({
     },
     err: '',
     msg: '',
-    cookie: ''
+    cookie: '',
+    marker: null,
+    map: null
   },
   mounted: function() {
     var jar = getCookies();
@@ -91,11 +93,35 @@ const app = new Vue({
         if (!err) {
           this.userid = data.userid;
           this.userDisplayName = data.userDisplayName;
+
+          // create map
+          var opts =  {
+            touchZoom: false,
+            scrollWheelZoom: false,
+            boxZoom: false,
+            keyboard: false,
+            center: [45.7818, -40.6787],
+            minZoom: 2,
+            zoom: 3,
+            dragging: false,
+            zoomControl: false
+          }
+          this.map = L.map('mapid', opts);
+          L.tileLayer( 'http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          }).addTo(this.map);
+          this.map.on('locationfound', (ev) => {
+            console.log('locationfound',ev.longitude, ev.latitude);
+            app.attended.longitude = ev.longitude;
+            app.attended.latitude = ev.latitude;
+            app.drawPin();
+          });
         }
       });
     } else {
       err = 'You are not logged in. Please type /advocated into Slack to get a login link'
     }
+
   },
   computed: {
     bloggedReady: function() {
@@ -115,6 +141,34 @@ const app = new Vue({
     }
   },
   methods: {
+    locate: (e) => {
+      e.preventDefault();
+      app.map.locate();
+    },
+    drawPin: () => {
+      try {
+        console.log( app.attended.longitude, app.attended.latitude);
+        var long = (typeof app.attended.longitude ==='string')? parseFloat(app.attended.longitude): app.attended.longitude;
+        var lat = (typeof app.attended.latitude ==='string')? parseFloat(app.attended.latitude): app.attended.latitude;
+        if (isNaN(lat) || isNaN(long)) {
+          return;
+        }
+        console.log('parsed', lat,long);
+        if (app.marker) {
+          app.map.removeLayer(app.marker);
+        }
+        app.marker = L.marker(L.latLng(lat,long)).addTo(app.map);
+       /* 
+        if (zoom) {
+          map.setView(new L.LatLng(lat, long), zoom);
+        }
+        else {
+          map.setView(new L.LatLng(lat, long));
+        }*/
+      } catch(e) {
+        console.log(e);
+      }
+    },
     resetForms: () => {
       var today = todayStr();
       app.attended.dtstart = today;
@@ -227,23 +281,6 @@ const app = new Vue({
       });
     },
     submitForm: (doc) => {
-      if (typeof doc.attendees === 'string') {
-        doc.attendees = parseInt(doc.attendees);
-      }
-      if (typeof doc.latitude === 'string') {
-        doc.latitude = parseFloat(doc.latitude);
-      }
-      if (typeof doc.longitude === 'string') {
-        doc.longitude = parseFloat(doc.longitude);
-      }
-      if (typeof doc.travel_expenses === 'string') {
-        doc.travel_expenses = parseFloat(doc.travel_expenses);
-      }
-      if (typeof doc.non_travel_expenses === 'string') {
-        doc.non_travel_expenses = parseFloat(doc.non_travel_expenses);
-      }
-
-      console.log('i', doc);
 
       // add auth information
       doc.cookie = app.cookie;

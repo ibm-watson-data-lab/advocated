@@ -5,6 +5,7 @@
     <meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons">
     <link rel="stylesheet" href="https://unpkg.com/vue-material@0.8.1/dist/vue-material.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css">
     <link rel="stylesheet" href="css/advocated.css">
   </head>
 
@@ -113,7 +114,7 @@
 
                 <md-input-container>
                   <label for="attendees">Attendees</label>
-                  <md-textarea name="attendees" type="number" id="attended-attendees" v-model="attended.attendees" required />
+                  <md-textarea name="attendees" type="number" id="attended-attendees" v-model.number="attended.attendees" required />
                 </md-input-container>                
 
                 <div>
@@ -135,13 +136,19 @@
                   
                 <md-input-container>
                   <label for="latitude">Latitude</label>
-                  <md-input name="latitude" type="number" id="attended-latitude" v-model="attended.latitude" min="-90" max="90" required />
+                  <md-input name="latitude" type="number" id="attended-latitude" v-model.number="attended.latitude" min="-90" max="90" @change="drawPin" required />
                 </md-input-container>
 
                 <md-input-container>
                   <label for="longitude">Longitude</label>
-                  <md-input name="longitude" type="number" id="attended-longitude" v-model="attended.longitude" min="-180" max="180" required />
+                  <md-input name="longitude" type="number" id="attended-longitude" v-model.number="attended.longitude" min="-180" max="180" @change="drawPin" required />
                 </md-input-container>
+                
+                <div>
+                  <a href="#" v-on:click="locate"><md-icon class="md-primary">my_location</md-icon></a>
+                </div>
+
+                <div id="mapid"></div>
 
                 <div>
                   <md-button type="button" class="md-primary" :disabled="!attendedReady" v-on:click="submitForm(attended)">Submit</md-button>
@@ -191,7 +198,7 @@
 
                 <md-input-container>
                   <label for="attendees">Attendees</label>
-                  <md-input name="attendees" type="number" id="presented-attendees" v-model="presented.attendees" required />
+                  <md-input name="attendees" type="number" id="presented-attendees" v-model.number="presented.attendees" required />
                 </md-input-container>
 
                 <div>
@@ -359,7 +366,7 @@
 
                 <md-input-container>
                   <label for="travel_expenses">Travel Expenses</label>
-                  <md-input name="travel_expenses" type="number" id="travel_expenses" v-model="expense.travel_expenses" placeholder="0.00"/>
+                  <md-input name="travel_expenses" type="number" id="travel_expenses" v-model.number="expense.travel_expenses" placeholder="0.00"/>
                 </md-input-container>
 
                 <md-input-container>
@@ -373,7 +380,7 @@
 
                 <md-input-container>
                   <label>Non-Travel Expenses</label>
-                  <md-input type="number" v-model="expense.non_travel_expenses" v-on:click="submitForm(expense)" />
+                  <md-input type="number" v-model.number="expense.non_travel_expenses" placeholder="0.00"/>
                 </md-input-container>
 
                 <div>
@@ -390,6 +397,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
     <script src="js/lib.js"></script>
     <script src="js/advocated.js"></script>
   </body>
