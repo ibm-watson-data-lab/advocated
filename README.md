@@ -41,6 +41,27 @@ The API of your serverless application is configured at the top of `js/lib.js`.
 
 The contents of the `gh-pages` branch are served out automatically at https://ibm-watson-data-lab.github.io/advocated.
 
+## Logging in
+
+You need to be invited to use this app. This involves creating a document in the `tokens` database of this form.
+
+```
+{
+  "_id": "c8d4ecc06ca25f48bcb53391a4cd1a15",    <-- auto generated
+  "teamid": "wdpdevadv",                        <-- constant
+  "userid": "glynn.bird@uk.ibm.com",            <-- the email address of the user to invite
+  "userDisplayName": "glynn.bird"               <-- the display name of the user to invite.
+}
+```
+
+e.g cut-n-paste this bit below the auto-generated _id in the Cloudant dashboards
+
+```
+  "teamid": "wdpdevadv",                       
+  "userid": "glynn.bird@uk.ibm.com",          
+  "userDisplayName": "glynn.bird" 
+```
+
 ## Replication
 
 To replicate just the blogs from the main database to a `blogs` database, you can create a document in the `_replicator` database like this:
