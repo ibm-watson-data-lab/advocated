@@ -7,7 +7,7 @@ if [ -z "$SLACK_WEBHOOK_URL"]; then echo "SLACK_WEBHOOK_URL is required"; exit 1
 ## design documents
 export COUCH_URL="$COUCH_HOST"
 couchmigrate --dd ./designdocs/report.js --db "$COUCH_DATABASE"
-
+exit 1
 # deploy to OpenWhisk
 bx wsk package update advocated --param COUCH_HOST $COUCH_HOST --param COUCH_DATABASE $COUCH_DATABASE --param SLACK_WEBHOOK_URL $SLACK_WEBHOOK_URL
 
@@ -23,6 +23,7 @@ bx wsk api create /advocated /userevents post advocated/userevents --response-ty
 bx wsk api create /advocated /userdocs post advocated/userdocs --response-type http
 bx wsk api create /advocated /getbyid post advocated/getbyid --response-type http
 bx wsk api create /advocated /deletebyid post advocated/deletebyid --response-type http
+bx wsk api create /advocated /userdocsbymonth post advocated/userdocsbymonth --response-type http
 
 # create changes feed listener
 # split out components of URL
