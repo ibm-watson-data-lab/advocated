@@ -390,6 +390,13 @@
             </div>
           </md-tab> <!-- expense -->
 
+          <md-tab v-if="cookie" id="tab-report" md-label="Report" :md-active="selectedTab===7">
+            <div>
+              <h2>Report</h2>
+              <div id="reportchart"></div>
+            </div>
+          </md-tab> <!-- expense -->    
+
         </md-tabs>
      
       </div> <!-- .main-content -->
@@ -398,6 +405,9 @@
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="js/simpledatavis.js"></script>
+    <script src="js/simpledatavis-stackedbarchart.js"></script>
     <script src="js/lib.js"></script>
     <script src="js/advocated.js"></script>
   </body>

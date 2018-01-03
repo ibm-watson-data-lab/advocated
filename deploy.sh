@@ -2,12 +2,12 @@
 
 if [ -z "$COUCH_HOST" ]; then echo "COUCH_HOST is required"; exit 1; fi
 if [ -z "$COUCH_DATABASE" ]; then echo "COUCH_DATABASE is required"; exit 1; fi
-if [ -z "$SLACK_WEBHOOK_URL"]; then echo "SLACK_WEBHOOK_URL is required"; exit 1; fi
+if [ -z "$SLACK_WEBHOOK_URL" ]; then echo "SLACK_WEBHOOK_URL is required"; exit 1; fi
 
 ## design documents
 export COUCH_URL="$COUCH_HOST"
 couchmigrate --dd ./designdocs/report.js --db "$COUCH_DATABASE"
-exit 1
+
 # deploy to OpenWhisk
 bx wsk package update advocated --param COUCH_HOST $COUCH_HOST --param COUCH_DATABASE $COUCH_DATABASE --param SLACK_WEBHOOK_URL $SLACK_WEBHOOK_URL
 

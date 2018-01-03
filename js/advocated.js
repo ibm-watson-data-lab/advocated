@@ -203,6 +203,40 @@ const app = new Vue({
         });
       } else if (tabIndex === 1) {
         app.getRecentDocs();
+      } else if (tabIndex === 7) {
+        console.log('report!!!!');
+        ajax('userdocsbymonth', {cookie:app.cookie}, (err, data) => { 
+          console.log(err, data);
+          var vizdata = [];
+          var starty = data.rows[0].key[1];
+          var startm = data.rows[0].key[2];
+          for(var i in data.rows) {
+            var d = data.rows[i];
+            var ym = d.key[1] + '-' + d.key[2];
+            var k = d.key[3];
+            var v = d.value;
+            var index = null;
+            for(var j in vizdata) {
+              if (vizdata[j].key === ym) {
+                index = j;
+              }
+            }
+            if (!index) {
+              var obj = {
+                key: ym,
+                value: { }
+              };
+              vizdata.push(obj);
+              index = vizdata.length - 1;
+            }
+            vizdata[index].value[k] = v;
+          }
+          console.log(vizdata);
+
+          SimpleDataVis(vizdata)
+            .attr('type', 'stacked-bar-chart')
+            .render('#reportchart')
+        });
       }
       console.log('onChange is triggered', tabIndex);
       console.log('editmode', app.editmode)
