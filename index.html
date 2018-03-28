@@ -180,6 +180,7 @@
                   </md-select>-->
                   <div>
                     <select name="event" id="presented-event" v-model="presented.event" required>
+                        <option value="">--None--</option>
                         <option v-for="event in events"  :value="event.id" :key="event.id">{{ event.value }}</md-option>
                     </select>
                   </div>
@@ -338,7 +339,7 @@
                   <div for="event">Event</div>
                   <div>
                     <select name="event" id="expense-event" v-model="expense.event" required>
-                        <md-option value="" :key="0">--None--</md-option>
+                        <option value="">--None--</option>
                         <option v-for="event in events"  :value="event.id" :key="event.id">{{ event.value }}</md-option>
                     </select>
                   </div>
