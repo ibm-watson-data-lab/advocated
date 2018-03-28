@@ -356,28 +356,28 @@
                   <md-textarea name="comments" id="expense-comments" v-model="expense.comments" />
                 </md-input-container>
 
-                <md-input-container>
-                    <label for="travel_expenses_currency">Travel expenses currency</label>
-                    <md-select v-model="expense.travel_expenses_currency" name="travel_expenses_currency" id="travel_expenses_currency">
-                      <md-option value="USD">USD</md-option>
-                      <md-option value="EUR">EUR</md-option>
-                      <md-option value="GBP">GBP</md-option>
-                    </md-select>
-                </md-input-container>
+                <div class="selector">
+                  <div for="travel_expenses_currency">Travel expenses currency</div>
+                  <select v-model="expense.travel_expenses_currency" name="travel_expenses_currency" id="travel_expenses_currency">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                  </select>
+                </div>
 
                 <md-input-container>
                   <label for="travel_expenses">Travel Expenses</label>
                   <md-input name="travel_expenses" type="number" id="travel_expenses" v-model.number="expense.travel_expenses" placeholder="0.00"/>
                 </md-input-container>
 
-                <md-input-container>
-                  <label for="non_travel_expenses_currency">Non-Travel Expenses currency</label>
-                  <md-select v-model="expense.non_travel_expenses_currency" name="non_travel_expenses_currency" id="non_travel_expenses_currency">
-                    <md-option value="USD">USD</md-option>
-                    <md-option value="EUR">EUR</md-option>
-                    <md-option value="GBP">GBP</md-option>
-                  </md-select>
-                </md-input-container>
+                <div class="selector">
+                  <div for="non_travel_expenses_currency">Non-Travel Expenses currency</div>
+                  <select v-model="expense.non_travel_expenses_currency" name="non_travel_expenses_currency" id="non_travel_expenses_currency">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                  </select>
+                </div>
 
                 <md-input-container>
                   <label>Non-Travel Expenses</label>
