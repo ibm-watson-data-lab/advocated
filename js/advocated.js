@@ -185,7 +185,7 @@ const app = new Vue({
       app.presented._id = app.presented._rev = app.presented.title = app.presented.description = app.presented.tags = app.presented.comments = '';
       app.blogged._id = app.blogged._rev = app.blogged.title = app.blogged.description = app.blogged.tags = app.blogged.comments = '';
       app.press._id = app.press._rev = app.press.title = app.press.description = app.press.tags = app.press.comments = '';
-      app.expense._id = app.expense._rev = app.expense.title = app.expense.description = app.expense.tags = app.expense.comments = '';
+      app.expense._id = app.expense._rev = app.expense.title = app.expense.description = app.expense.tags = app.expense.comments = app.expense.event = '';
     },
     onChangeTab: (tabIndex) => {
       if (tabIndex == 0) return;
