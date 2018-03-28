@@ -19,4 +19,8 @@
   display: none;
 }
 
+.selector {
+  margin-bottom:30px
+}
+
 #mapid { height: 560px; }
