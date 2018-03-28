@@ -30,7 +30,7 @@ var getCookies = function() {
     var bits = document.cookie.split(';');
     bits.forEach(function(bit) {
       var kv = bit.split('=');
-      jar[kv[0]] = kv[1];
+      jar[kv[0].trim()] = kv[1];
     });
     return jar;
   } else {
