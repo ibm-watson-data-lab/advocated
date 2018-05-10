@@ -83,6 +83,7 @@ const app = new Vue({
     map: null
   },
   mounted: function() {
+    return;
     var jar = getCookies();
     if (jar && jar.advocatedtoken) {
       this.cookie = jar.advocatedtoken;
